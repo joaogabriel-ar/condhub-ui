@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import userService from "../../services/userService";
 import { useEffect } from "react";
+import clearCache from "../../utils/utils";
 
 export default function ProtectedRouter({ children }: any) {
 
@@ -8,23 +9,17 @@ export default function ProtectedRouter({ children }: any) {
 
     const navigate = useNavigate();
 
-    const authenticate = async () => {
+    const authenticate = async () => {        
 
         let valid: any = await userService.checkAuthentication();
 
         authenticated = valid;
 
-        if (!authenticated) {
+        if (!authenticated) {            
 
-            if(localStorage.getItem("users")) {
-                
-                localStorage.removeItem("users")
-            } else {
-                sessionStorage.removeItem("users")
+            clearCache();
 
-            }
-
-            navigate("/");
+            navigate("/login");
         }
     };
 

@@ -1,9 +1,9 @@
-export default function Home() {
+import Sidebar from "../../components/sidebar/sidebar"
 
-    console.log("entrei na home")
+export default function Home() {    
 
     return(
-        <h1>Welcome Home !</h1>
+        <Sidebar/>
     )
 
 }

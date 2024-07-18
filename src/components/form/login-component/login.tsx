@@ -2,15 +2,18 @@ import Header from "../../header/header";
 import SubmitButton from "../button-submit/submit";
 import FormInput from "../input/input";
 import logo from "../../../assets/images/logo.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import userService from "../../../services/userService"
 import { useNavigate } from "react-router-dom";
+import ErrorMessage from "../../error/errorMessage";
 
 export default function Login() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [remember, setRemember] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+
     const navigate = useNavigate();
 
     function handleCheckbox(e:any) {
@@ -18,6 +21,24 @@ export default function Login() {
         setRemember(e.target.checked);
 
     }
+
+    const isAuthenticated = async () => {        
+
+        if(!await userService.checkAuthentication()) {
+
+            return;
+
+        }
+
+        navigate("/");
+
+    }
+
+    useEffect(() => {
+
+        isAuthenticated();
+
+    }, []);
 
     async function handleSubmit(e: any) {
 
@@ -28,30 +49,44 @@ export default function Login() {
             password
         };
 
-        const { data, status } = await userService.login(credentials);
+        try {
 
-        if (status === "failed") {
+            const { data, status } = await userService.login(credentials);
 
-            return
+            if(!data || !status) {
+                throw "Credenciais invalidas";
+            }
+            
+            if (status === "failed") {
+                
+                setErrorMessage("Credenciais inválida");
+                return;
+            }
+    
+            setErrorMessage("");
+    
+            if(remember) {
+    
+                localStorage.setItem("user", JSON.stringify({
+                    token: data.token,
+                    ...data.user
+                }));
+    
+            } else {
+    
+                sessionStorage.setItem("user", JSON.stringify({
+                    token: data.token,
+                    ...data.user
+                }));
+            }        
+            
+            navigate("/");
 
+        } catch(err:any) {
+            
+            setErrorMessage(err);
+            
         }
-
-        if(remember) {
-
-            localStorage.setItem("user", JSON.stringify({
-                token: data.token,
-                ...data.user
-            }));
-
-        } else {
-
-            sessionStorage.setItem("user", JSON.stringify({
-                token: data.token,
-                ...data.user
-            }));
-        }        
-        
-        navigate("/home");
 
     }
 
@@ -76,6 +111,9 @@ export default function Login() {
                     </div>
                     <SubmitButton />
                 </form>
+
+                {errorMessage ? <ErrorMessage message={errorMessage}/> : ""}
+               
             </div>
         </div>
     )

@@ -45,12 +45,13 @@ const userService = {
             const user = item && JSON.parse(item);        
     
             if (!user || !user.token) {
-                resolve(false);
-            }
+                
+                return resolve(false);
+            }            
     
-            let { data }: any = await this.verifyToken(user.token);
+            let { data }: any = await this.verifyToken(user.token);            
     
-            resolve(data.valid);
+            return resolve(data.valid);
         });
 
 
