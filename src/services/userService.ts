@@ -10,7 +10,7 @@ const userService = {
             const response = await axios.post(ENV.url + "/auth/login", {
                 email,
                 password
-            });
+            });            
 
             return response;
 

@@ -1,12 +1,13 @@
-
-
 import "./sidebar.scss"
-import { FaBars } from "react-icons/fa";
+import { FaArrowCircleLeft } from "react-icons/fa";
+import { FaArrowCircleRight } from "react-icons/fa";
 import { FiUsers } from "react-icons/fi";
 import { CiSettings } from "react-icons/ci";
+import logo from "../../assets/images/logo.png";
+import { useState } from "react";
 
 let midSectionCards = [
-    {   
+    {
         key: "user",
         name: "Usuários",
         selected: true
@@ -31,43 +32,61 @@ let bottomSectionCards = [
         name: "Configurações",
         selected: false
     }
-]
-
-function setCardStyle (card:any) {
-
-    let style = {
-    
-        backgroundColor: card.selected && '#0389ff',
-        color: card.selected && 'white'
-    }
-
-    return style
-
-}
-
+];
 
 export default function Sidebar() {
 
+    const [isOpened, setisOpened] = useState(false);
+
+    function setCardStyle(card: any) {
+
+        let style = {
+
+            backgroundColor: card.selected && '#0389ff',
+            color: card.selected && 'white'
+        }
+
+        return style
+
+    }
+
+    function handleSideBarShow() {
+
+        setisOpened(!isOpened);
+
+    }
+
     return (
-        <div className="sidebar">
+        <div className={!isOpened ? "sidebar" : "sidebar closed-sidebar"}>
 
             <div className="top-section">
                 <div className="top-card">
-                    <FaBars/>
-                    <span className="condhub">Condhub</span>
+                    <div className="logo">
+                        <img src={logo} alt="logo" />
+                    </div>
+                    {!isOpened ?
+                        <div className="toggle-sidebar-icon">
+                            <FaArrowCircleLeft onClick={() => handleSideBarShow()} />
+                        </div> :
+                        <div className="toggle-sidebar-icon">
+                             <FaArrowCircleRight onClick={() => handleSideBarShow()} />
+                        </div>
+                       
+                    }
                 </div>
 
             </div>
             <div className="mid-section">
-
                 {
                     midSectionCards.map(card => {
-                        return(
+                        return (
 
-                            <div key={card.key} className="mid-cards">
+                            <div key={card.key} className="cards">
 
                                 <div className="card" style={setCardStyle(card)}>
-                                    <FiUsers/>
+                                    <div className="icon">
+                                        <FiUsers />
+                                    </div>
                                     <p>{card.name}</p>
                                 </div>
 
@@ -78,15 +97,16 @@ export default function Sidebar() {
             </div>
 
             <div className="bottom-section">
-
                 {
                     bottomSectionCards.map(card => {
                         return (
 
-                            <div key={card.key} className="bottom-cards">
+                            <div key={card.key} className="cards">
 
                                 <div className="card" style={setCardStyle(card)}>
+                                <div className="icon">
                                     <CiSettings />
+                                </div>
                                     <p>{card.name}</p>
                                 </div>
 

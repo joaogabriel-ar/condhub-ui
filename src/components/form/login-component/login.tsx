@@ -22,7 +22,7 @@ export default function Login() {
 
     }
 
-    const isAuthenticated = async () => {        
+    const isAuthenticated = async () => {
 
         if(!await userService.checkAuthentication()) {
 
@@ -41,7 +41,7 @@ export default function Login() {
     }, []);
 
     async function handleSubmit(e: any) {
-
+        
         e.preventDefault();
 
         const credentials = {
@@ -49,7 +49,7 @@ export default function Login() {
             password
         };
 
-        try {
+        try {            
 
             const { data, status } = await userService.login(credentials);
 
