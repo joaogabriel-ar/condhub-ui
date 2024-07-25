@@ -1,52 +1,63 @@
 import "./sidebar.scss"
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { FaArrowCircleRight } from "react-icons/fa";
-import { FiUsers } from "react-icons/fi";
-import { CiSettings } from "react-icons/ci";
+import { PiUsers } from "react-icons/pi";
+import { IoSettingsOutline } from "react-icons/io5";
 import logo from "../../assets/images/logo.png";
 import { useState } from "react";
-
-let midSectionCards = [
-    {
-        key: "user",
-        name: "Usuários",
-        selected: true
-    },
-    {
-        key: "user2",
-        name: "Usuários",
-        selected: false
-
-    },
-    {
-        key: "user3",
-        name: "Usuários",
-        selected: false
-
-    }
-];
-
-let bottomSectionCards = [
-    {
-        key: "config",
-        name: "Configurações",
-        selected: false
-    }
-];
+import userService from "../../services/userService";
+import menuCardsOptions from "./menuOptions";
+import { useNavigate } from "react-router-dom";
+import clearCache from "../../utils/utils";
 
 export default function Sidebar() {
 
     const [isOpened, setisOpened] = useState(false);
+    const [menuCards, setMenuCards] = useState([...menuCardsOptions]);
+    const navigate = useNavigate();
+
+    const events:any = {
+
+        'logout': async () => {
+
+            clearCache();
+
+            if (!(await userService.checkAuthentication())) {
+
+                navigate("/login");
+
+            }
+        }
+    }
 
     function setCardStyle(card: any) {
 
         let style = {
 
-            backgroundColor: card.selected && '#0389ff',
-            color: card.selected && 'white'
+            backgroundColor: card.selected && '#d1e9ff',
+            color: card.selected && '#0389ff',
         }
 
         return style
+
+    }
+
+    async function handleClick(card: any) {
+
+        if(card.key !== 'logout') {
+
+            let newMidSectionCards = menuCards.map(c => ({
+                ...c,
+                selected: c.key === card.key
+            }));
+    
+            setMenuCards(newMidSectionCards);            
+
+            return; 
+            
+        }
+
+        await events[card.key]();
 
     }
 
@@ -64,28 +75,29 @@ export default function Sidebar() {
                     <div className="logo">
                         <img src={logo} alt="logo" />
                     </div>
+
                     {!isOpened ?
                         <div className="toggle-sidebar-icon">
                             <FaArrowCircleLeft onClick={() => handleSideBarShow()} />
                         </div> :
                         <div className="toggle-sidebar-icon">
-                             <FaArrowCircleRight onClick={() => handleSideBarShow()} />
+                            <FaArrowCircleRight onClick={() => handleSideBarShow()} />
                         </div>
-                       
+
                     }
                 </div>
 
             </div>
             <div className="mid-section">
                 {
-                    midSectionCards.map(card => {
+                    menuCards.filter(c => !c.isBottom).map(card => {
                         return (
 
                             <div key={card.key} className="cards">
 
-                                <div className="card" style={setCardStyle(card)}>
+                                <div className={!card.selected ? "card" : "card card-after"} onClick={() => handleClick(card)} style={setCardStyle(card)}>
                                     <div className="icon">
-                                        <FiUsers />
+                                        <PiUsers />
                                     </div>
                                     <p>{card.name}</p>
                                 </div>
@@ -96,17 +108,21 @@ export default function Sidebar() {
                 }
             </div>
 
+            <div className="separator">
+
+            </div>
+
             <div className="bottom-section">
                 {
-                    bottomSectionCards.map(card => {
+                    menuCards.filter(c => c.isBottom).map(card => {
                         return (
 
                             <div key={card.key} className="cards">
 
-                                <div className="card" style={setCardStyle(card)}>
-                                <div className="icon">
-                                    <CiSettings />
-                                </div>
+                                <div className={!card.selected ? "card" : "card card-after"} onClick={() => handleClick(card)} style={setCardStyle(card)}>
+                                    <div className="icon">
+                                        <IoSettingsOutline />
+                                    </div>
                                     <p>{card.name}</p>
                                 </div>
 
