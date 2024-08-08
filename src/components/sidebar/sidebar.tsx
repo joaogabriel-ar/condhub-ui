@@ -6,14 +6,12 @@ import { IoSettingsOutline } from "react-icons/io5";
 import logo from "../../assets/images/logo.png";
 import { useState } from "react";
 import userService from "../../services/userService";
-import menuCardsOptions from "./menuOptions";
 import { useNavigate } from "react-router-dom";
 import clearCache from "../../utils/utils";
 
-export default function Sidebar() {
+export default function Sidebar({menuCards, setMenuCards}:any) {
 
     const [isOpened, setisOpened] = useState(false);
-    const [menuCards, setMenuCards] = useState([...menuCardsOptions]);
     const navigate = useNavigate();
 
     const events:any = {
@@ -46,7 +44,7 @@ export default function Sidebar() {
 
         if(card.key !== 'logout') {
 
-            let newMidSectionCards = menuCards.map(c => ({
+            let newMidSectionCards = menuCards.map((c:any) => ({
                 ...c,
                 selected: c.key === card.key
             }));

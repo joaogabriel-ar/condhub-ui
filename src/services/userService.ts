@@ -53,8 +53,13 @@ const userService = {
     
             return resolve(data.valid);
         });
+    },
 
+    getUserFromStorage() {
 
+        let user:any = localStorage.getItem("user") || sessionStorage.getItem("user");
+
+        return user && JSON.parse(user);  
     }
 }
 
