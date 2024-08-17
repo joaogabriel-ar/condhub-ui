@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import userService from "../../services/userService";
 import { useEffect } from "react";
-import clearCache from "../../utils/utils";
+import { clearCache } from "../../utils/utils";
 
 export default function ProtectedRouter({ children }: any) {
 

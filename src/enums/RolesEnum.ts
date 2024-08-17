@@ -1,5 +1,5 @@
 export enum RolesEnum {
-    Admin = 1,
-    Syndic = 2,
-    Resident = 3
+    admin = 1,
+    syndic = 2,
+    resident = 3
   }

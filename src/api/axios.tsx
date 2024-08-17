@@ -1,9 +1,6 @@
 import axios from "axios";
-import userService from "../services/userService";
 
-let { token }: any = userService.getUserFromStorage();
-
-async function axiosGet(route: string) {
+async function axiosGet(route: string, token: string) {
 
     let { data } = await axios.get(route, {
         headers: {
@@ -12,6 +9,8 @@ async function axiosGet(route: string) {
     });
 
     return data;
+
+
 }
 
 export { axiosGet };

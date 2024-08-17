@@ -22,11 +22,11 @@ const userService = {
 
     },
 
-    async verifyToken(token: any) {
+    async verifyToken(token: any, userId: number) {
 
         try {
 
-            const response = await axios.post(ENV.url + "/auth/verify", { token });
+            const response = await axios.post(ENV.url + "/auth/verify", { token, userId });
 
             return response;
 
@@ -49,16 +49,16 @@ const userService = {
                 return resolve(false);
             }            
     
-            let { data }: any = await this.verifyToken(user.token);            
+            let { data }: any = await this.verifyToken(user.token, user.id);            
     
             return resolve(data.valid);
         });
     },
 
-    getUserFromStorage() {
+    getUserFromStorage() {        
 
-        let user:any = localStorage.getItem("user") || sessionStorage.getItem("user");
-
+        let user:any = localStorage.getItem("user") || sessionStorage.getItem("user");        
+                
         return user && JSON.parse(user);  
     }
 }

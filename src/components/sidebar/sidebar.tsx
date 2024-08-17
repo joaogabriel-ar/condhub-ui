@@ -7,7 +7,7 @@ import logo from "../../assets/images/logo.png";
 import { useState } from "react";
 import userService from "../../services/userService";
 import { useNavigate } from "react-router-dom";
-import clearCache from "../../utils/utils";
+import { clearCache } from "../../utils/utils";
 
 export default function Sidebar({menuCards, setMenuCards}:any) {
 
@@ -88,7 +88,7 @@ export default function Sidebar({menuCards, setMenuCards}:any) {
             </div>
             <div className="mid-section">
                 {
-                    menuCards.filter(c => !c.isBottom).map(card => {
+                    menuCards.filter((c:any) => !c.isBottom).map((card:any) => {
                         return (
 
                             <div key={card.key} className="cards">
@@ -112,7 +112,7 @@ export default function Sidebar({menuCards, setMenuCards}:any) {
 
             <div className="bottom-section">
                 {
-                    menuCards.filter(c => c.isBottom).map(card => {
+                    menuCards.filter((c:any) => c.isBottom).map((card:any) => {
                         return (
 
                             <div key={card.key} className="cards">

@@ -1,8 +1,11 @@
+import { RolesEnum } from "../enums/RolesEnum"
+
 let rolesStyles:any = {
 
-    1: {
+    [RolesEnum.admin]: {
         backgroundColor: "#D3D3D3",
-        color: '#333333'
+        color: '#333333',
+        borderRadius: '5px'
     }
 
 }
